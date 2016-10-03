@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+	$(document).ready(function()
+		{
+			$('#result_table').hide();
+			$('#computeButton').click
+			(
+				function(e)
+				{
+					e.preventDefault();
+
+					$.ajax({
+					type:'POST',
+					url:'/user/compute/',
+					data:{p:$('#principal').val(),
+					r:$('#rate').val(),
+					t:$('#time').val(),
+					csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+					},
+					success:function(data)
+					{
+					console.log(data)
+					$('#result_table').show();
+					$('#p').text(String(data.principal));
+					$('#r').text(String(data.rate));
+					$('#t').text(String(data.time));
+					$('#result').text(String(data.result));
+					return false;
+					}
+					
+					});			
+				});
+		});
+</script>
+
+</head>
+
+<body>
+	<div id = "simple">{% csrf_token %}
+		<table>
+		<tr> <td>Principal </td> <td> <input type="text" id = "principal" name = "principal" value=12000 /> </td></tr>
+		<tr> <td>Rate </td> <td> <input type="text" id = "rate" name = "rate" value=24 /> </td></tr>
+		<tr> <td>Time </td> <td> <input type="text" id = "time" name = "time" value=3 /> </td></tr>
+		<tr> <td><input type = "submit" id = "computeButton" value = "Submit"/> </td></tr>
+		</table>
+	</div>
+	
+	<div id = "result_table">
+		<table>
+		<tr> <td> Principal </td> <td> <span id ="p"></span> </td> </tr>
+		<tr> <td> Rate  </td> <td> <span id ="r"></span> </td> </tr>
+		<tr> <td> Time  </td> <td> <span id ="t"></span> </td> </tr>
+		<tr> <td> Result </td> <td> <span id ="result"></span> </td> </tr>
+		</table>
+	</div>
+</body>
+</html>			
